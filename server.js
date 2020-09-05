@@ -14,12 +14,12 @@ import { timeStamp } from 'console'
 
 const app = express()
 const port = 3001
-const dbUrl = 'mongodb://localhost/troument'
-// const dbUrl = 'mongodb://localhost/crudtest'
+// const dbUrl = 'mongodb://localhost/troument'
+const dbUrl = 'mongodb://localhost/crudtest'
 // const ObjectId = require('mongodb').ObjectID;
 
 
-// var session = require("express-session");
+var session = require("express-session");
 // var MongoStore = require('connect-mongo')(session);
 
 // app.use(session({
@@ -82,7 +82,7 @@ mongoose.connect(dbUrl, dbErr => {
 
   app.get('/api/userinfo', (request, response) => {
     const { username } = request.query
-    User.find({ 'user_name': username }, (err, userinfo) => {
+    User.findOne({ 'user_name': username }, (err, userinfo) => {
       if (err) response.status(500).send()
       else response.status(200).send(userinfo)
     })
@@ -112,7 +112,6 @@ mongoose.connect(dbUrl, dbErr => {
           time,
           worry_id
         }).save((err, res) => {
-          console.log(res, 'res', result)
           if (err) response.status(500)
           else response.status(200).send(res)
         })
@@ -165,7 +164,7 @@ mongoose.connect(dbUrl, dbErr => {
 
   app.get('/api/goodcheck', (request, response) => {
     const { username, _id, count } = request.query
-    User.find({ 'goodlist': _id, 'user_name': username }).populate('goodlist')
+    User.findOne({ 'goodlist': _id, 'user_name': username }).populate('goodlist')
       .then((result) => {
         response.status(200).send(result)
       })
@@ -245,7 +244,11 @@ mongoose.connect(dbUrl, dbErr => {
   // ****************************************************************///
 
   app.post('/api/user_create', (request, response) => {
-    const { user_name, password } = request.body
+    let { user_name, password } = request.body
+    const bcrypt = require('bcrypt');
+    const saltRounds = 10;
+
+    // var hashed_password = bcrypt.hashSync(password, saltRounds);
 
     User.find({
       'user_name': user_name
@@ -256,14 +259,17 @@ mongoose.connect(dbUrl, dbErr => {
           response.status(200).send('同一のアカウント名が存在します')
         } else {
           const user_id = Date.now() + user_name
+          password = bcrypt.hashSync(password, saltRounds);
           new User({
             user_name,
             password,
+            // password,
             user_id,
             thumbnail: 'user.png'
           }).save((err, res) => {
             if (err) response.status(500)
             else response.status(200).send('追加成功')
+
           })
         }
 
@@ -278,20 +284,28 @@ mongoose.connect(dbUrl, dbErr => {
 
   app.get('/api/user_login', (request, response) => {
     const { user_name, password } = request.query
+    const bcrypt = require('bcrypt');
+
+    // Userを検索して存在すればパスワードチェック。いなければ終了
 
     User.findOne({
       'user_name': user_name,
-      'password': password
+      // 'password': password
     })
 
       .then((result) => {
-        if (result === null) {
-          response.status(200).send(result)
-        } else {
-          var session = request.session
-          var thumbnail = result.thumbnail
-          session.isLoggedIn = true
-          response.status(200).send(result)
+        if (result) {
+          const hashedPassword = result.password
+          bcrypt.compare(password, hashedPassword)
+            .then((isCorrectPassword) => {
+              if(isCorrectPassword){
+                response.status(200).send(result)
+              }else{
+                response.status(200).send('パスワードが一致していません')
+              }
+            })
+          } else {
+            response.status(200).send('アカウントが存在しません')
         }
 
       }).catch((err) => {
@@ -396,7 +410,6 @@ mongoose.connect(dbUrl, dbErr => {
   })
 
   // app.post('/api/files', upload.fields([{ name: 'Files' }]), (req, res) => {
-  //   console.log(req, 'FILE')
   //   const { username, formData } = req.body
   //   User.updateOne({ 'user_name': username }, { $set: { 'thumbnail': req.files.Files[0].filename } },
   //     { upsert: true, multi: true },
