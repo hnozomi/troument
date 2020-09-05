@@ -6,51 +6,20 @@ import User from './models/user'
 import multer from 'multer';
 import AWS from 'aws-sdk';
 import multerS3 from 'multer-s3';
-// var multerS3 = require('multer-s3');
-// var AWS = require('aws-sdk');
-import { getMaxListeners } from 'process'
-import { timeStamp } from 'console'
 
 
 const app = express()
 const port = 3001
-// const dbUrl = 'mongodb://localhost/troument'
-const dbUrl = 'mongodb://localhost/crudtest'
-// const ObjectId = require('mongodb').ObjectID;
+const dbUrl = 'mongodb://localhost/troument'
+// const dbUrl = 'mongodb://localhost/crudtest'
 
 
 var session = require("express-session");
-// var MongoStore = require('connect-mongo')(session);
 
-// app.use(session({
-//   secret: 'secret',
-//   resave: false,
-//   saveUninitialized: false,
-//   store: new MongoStore({
-//     url: 'mongodb://localhost/crudtest',
-//   }),
-//   cookie: {
-//     httpOnly: false,
-//     secure: false,
-//     maxage: 1000 * 60 * 30
-//   }
-// }));
-
-// var loginCheck = function (req, res, next) {
-//   if (req.session.username) {
-//     next();
-//   } else {
-//     res.redirect('/login');
-//   }
-// };
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-
-// app.get("/api/session", function (request, response) {
-//   response.send(request.session.username);
-// });
 
 
 app.listen(port, err => { // http://localhost:3001にサーバーがたつ
@@ -341,14 +310,6 @@ mongoose.connect(dbUrl, dbErr => {
     }).sort({ time: 1 }).populate('user')
   })
 
-  // app.get('/api/myinfo', (request, response) => {
-  //   const { username } = request.query
-  //   User.findOne({ 'user_name': username }, (err, myinfo) => {
-  //     if (err) response.status(500).send()
-  //     else response.status(200).send(myinfo)
-  //   })
-  // })
-
 
   // ****************************************************************///
   // いいねしているリストを取得  コンポーネント：MYPAGE
@@ -409,15 +370,6 @@ mongoose.connect(dbUrl, dbErr => {
     res.send('Successfully uploaded ' + req.files.length + ' files!')
   })
 
-  // app.post('/api/files', upload.fields([{ name: 'Files' }]), (req, res) => {
-  //   const { username, formData } = req.body
-  //   User.updateOne({ 'user_name': username }, { $set: { 'thumbnail': req.files.Files[0].filename } },
-  //     { upsert: true, multi: true },
-  //     (err) => {
-  //       res.status(200).send(req.files)
-  //     })
-
-  // });
 
 })
 
