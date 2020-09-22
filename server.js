@@ -234,7 +234,7 @@ mongoose.connect(dbUrl, dbErr => {
             password,
             // password,
             user_id,
-            thumbnail: '/image/user.png'
+            thumbnail: 'image/user.png'
           }).save((err, res) => {
             if (err) response.status(500)
             else response.status(200).send('追加成功')
