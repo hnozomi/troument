@@ -10,8 +10,8 @@ import multerS3 from 'multer-s3';
 
 const app = express()
 const port = 3001
-const dbUrl = 'mongodb://localhost/troument'
-// const dbUrl = 'mongodb://localhost/crudtest'
+// const dbUrl = 'mongodb://localhost/troument'
+const dbUrl = 'mongodb://localhost/crudtest'
 
 
 var session = require("express-session");
@@ -264,6 +264,7 @@ mongoose.connect(dbUrl, dbErr => {
 
       .then((result) => {
         if (result) {
+          console.log(result)
           const hashedPassword = result.password
           bcrypt.compare(password, hashedPassword)
             .then((isCorrectPassword) => {
