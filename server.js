@@ -251,8 +251,8 @@ mongoose.connect(dbUrl, dbErr => {
   // ユーザーをログインさせる　　コンポーネント：LOGIN
   // ****************************************************************///
 
-  app.get('/api/user_login', (request, response) => {
-    const { user_name, password } = request.query
+  app.post('/api/user_login', (request, response) => {
+    const { user_name, password } = request.body
     const bcrypt = require('bcrypt');
 
     // Userを検索して存在すればパスワードチェック。いなければ終了
