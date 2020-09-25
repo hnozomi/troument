@@ -413,6 +413,7 @@ class ServerExample {
    * @param {http.ServerResponse} res
    */
   onRequest(req, res) {
+    console.log(req)
     this.allowCors(res);
 
     const { method, url } = req;
