@@ -401,29 +401,28 @@ class ServerExample {
     this.server.on('listening', () => {
       console.log('Server is listening ' + port + '...');
     });
-
+    
     this.server.on('error', (error) => {
       console.log('Failed to run server', error);
     });
   }
-
+  
   /**
    * Request handler
    * @param {http.IncomingMessage} req
    * @param {http.ServerResponse} res
    */
   onRequest(req, res) {
-    console.log(req)
     this.allowCors(res);
-
+    
     const { method, url } = req;
-    console.log(method, url)
-
+    
     if (method.toLowerCase() !== 'get') {
       res.end();
       return;
     }
-
+    
+    console.log(url)
     const link = decodeURIComponent(url.slice('/fetchUrl?url='.length));
 
     /**
