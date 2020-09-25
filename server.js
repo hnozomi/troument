@@ -456,6 +456,6 @@ class ServerExample {
 }
 
 new ServerExample({
-  port: 8008,
+  port: 3001,
   fieldName: 'link'
 });
