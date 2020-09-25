@@ -416,6 +416,7 @@ class ServerExample {
     this.allowCors(res);
 
     const { method, url } = req;
+    console.log(method, url)
 
     if (method.toLowerCase() !== 'get') {
       res.end();
