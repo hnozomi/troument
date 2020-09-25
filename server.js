@@ -422,9 +422,9 @@ class ServerExample {
       return;
     }
     
-    console.log(url)
-    var body = req.protocol + '://' + req.headers.host + req.url;
-    console.log(body)
+    // console.log(url)
+    // var body = req.protocol + '://' + req.headers.host + req.url;
+    // console.log(body)
     const link = decodeURIComponent(url.slice('/fetchUrl?url='.length));
 
     /**
