@@ -375,22 +375,24 @@ mongoose.connect(dbUrl, dbErr => {
 // テスト
 
 app.get('/api/fetchUrl', (request, response) => {
-  console.log(request.query)
+  console.log(request.query.url)
 
-  // og(link, function (err, meta) {
-  //   if (meta) {
-  //     res.end(JSON.stringify({
-  //       success: 1,
-  //       meta
-  //     }));
-  //   } else {
-  //     res.end(JSON.stringify({
-  //       success: 0,
-  //       meta: {}
-  //     }));
-  //     console.log(err);
-  //   }
-  // });
+  const { link } = request.query.url;
+
+  og(link, function (err, meta) {
+    if (meta) {
+      res.end(JSON.stringify({
+        success: 1,
+        meta
+      }));
+    } else {
+      res.end(JSON.stringify({
+        success: 0,
+        meta: {}
+      }));
+      console.log(err);
+    }
+  });
 })
 
 
