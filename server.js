@@ -377,8 +377,9 @@ mongoose.connect(dbUrl, dbErr => {
 app.get('/api/fetchUrl', (request, response) => {
   console.log(request.query.url)
   const { url } = request.query.url;
+  const link = String(url)
 
-  const link = decodeURIComponent(url.slice('/fetchUrl?url='.length));
+  // const link = decodeURIComponent(url.slice('/fetchUrl?url='.length));
 
 
   og(link, function (err, meta) {
@@ -439,9 +440,11 @@ class ServerExample {
    */
   onRequest(req, res) {
     this.allowCors(res);
+    console.log(req, 'REQ')
     
     const { method, url } = req;
     
+    console.log(url, 'URL')
     if (method.toLowerCase() !== 'get') {
       res.end();
       return;
@@ -485,7 +488,7 @@ class ServerExample {
   }
 }
 
-// new ServerExample({
-//   port: 8080,
-//   fieldName: 'link'
-// });
+new ServerExample({
+  port: 8080,
+  fieldName: 'link'
+});
