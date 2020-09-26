@@ -376,6 +376,8 @@ mongoose.connect(dbUrl, dbErr => {
 
 app.get('/api/fetchUrl', (request, response) => {
   console.log(request.query.url)
+  const http = require('http');
+  const og = require('open-graph');
   const { url } = request.query.url;
   const link = decodeURIComponent(String(url))
 
@@ -384,12 +386,12 @@ app.get('/api/fetchUrl', (request, response) => {
 
   og(link, function (err, meta) {
     if (meta) {
-      response.end(JSON.stringify({
+      response.send(JSON.stringify({
         success: 1,
         meta
       }));
     } else {
-      response.end(JSON.stringify({
+      response.send(JSON.stringify({
         success: 0,
         meta: {}
       }));
