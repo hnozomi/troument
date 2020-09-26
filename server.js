@@ -488,7 +488,7 @@ class ServerExample {
   }
 }
 
-new ServerExample({
-  port: 8080,
-  fieldName: 'link'
-});
+// new ServerExample({
+//   port: 8080,
+//   fieldName: 'link'
+// });
