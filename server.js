@@ -377,7 +377,7 @@ mongoose.connect(dbUrl, dbErr => {
 app.get('/api/fetchUrl', (request, response) => {
   const http = require('http');
   const og = require('open-graph');
-  const { url } = request.query.url;
+  const { url } = request.query;
   console.log(url, 'URL')
   const link1 = String(url)
   console.log(link1, 'LINK1')
