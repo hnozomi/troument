@@ -391,6 +391,8 @@ app.get('/api/fetchUrl', (request, response) => {
         meta
       }));
     } else {
+      console.log(meta, 'META')
+      console.log(response, 'RESPONSE')
       response.send(JSON.stringify({
         success: 0,
         meta: {}
