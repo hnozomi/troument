@@ -375,12 +375,15 @@ mongoose.connect(dbUrl, dbErr => {
 // テスト
 
 app.get('/api/fetchUrl', (request, response) => {
-  console.log(request.query.url)
   const http = require('http');
   const og = require('open-graph');
   const { url } = request.query.url;
+  console.log(url, 'URL')
+  const link1 = String(url)
+  console.log(link1, 'LINK1')
   const link = decodeURIComponent(String(url))
-
+  console.log(link, 'LINK')
+  
   // const link = decodeURIComponent(url.slice('/fetchUrl?url='.length));
 
 
