@@ -377,7 +377,7 @@ mongoose.connect(dbUrl, dbErr => {
 app.get('/api/fetchUrl', (request, response) => {
   console.log(request.query.url)
   const { url } = request.query.url;
-  const link = String(url)
+  const link = decodeURIComponent(String(url))
 
   // const link = decodeURIComponent(url.slice('/fetchUrl?url='.length));
 
