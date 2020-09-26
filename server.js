@@ -384,12 +384,12 @@ app.get('/api/fetchUrl', (request, response) => {
 
   og(link, function (err, meta) {
     if (meta) {
-      res.end(JSON.stringify({
+      response.end(JSON.stringify({
         success: 1,
         meta
       }));
     } else {
-      res.end(JSON.stringify({
+      response.end(JSON.stringify({
         success: 0,
         meta: {}
       }));
