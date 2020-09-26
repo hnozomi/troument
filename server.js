@@ -369,10 +369,19 @@ mongoose.connect(dbUrl, dbErr => {
   app.post('/api/files', upload.array('photos', 3), function (req, res, next) {
     res.send('Successfully uploaded ' + req.files.length + ' files!')
   })
-
-
 })
 
+
+// テスト
+
+app.get('/api/fetchUrl', (request, response) => {
+  console.log(request.query)
+  const { username } = request.query
+  List.find({ 'username': username }, (err, todolists) => {
+    if (err) response.status(500).send()
+    else response.status(200).send(todolists)
+  }).sort({ time: 1 }).populate('user')
+})
 
 
 /**
@@ -397,6 +406,8 @@ class ServerExample {
     this.server = http.createServer((req, res) => {
       this.onRequest(req, res);
     }).listen(port);
+
+    console.log(this.server)
 
     this.server.on('listening', () => {
       console.log('Server is listening ' + port + '...');
@@ -430,6 +441,8 @@ class ServerExample {
     /**
      * Get available open-graph meta-tags from page
      */
+
+    //  postで関数実行して中でog実行して、linkは送られてきたURLにする
     og(link, function (err, meta) {
       if (meta) {
         res.end(JSON.stringify({
