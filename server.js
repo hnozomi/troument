@@ -376,11 +376,21 @@ mongoose.connect(dbUrl, dbErr => {
 
 app.get('/api/fetchUrl', (request, response) => {
   console.log(request.query)
-  const { username } = request.query
-  List.find({ 'username': username }, (err, todolists) => {
-    if (err) response.status(500).send()
-    else response.status(200).send(todolists)
-  }).sort({ time: 1 }).populate('user')
+
+  // og(link, function (err, meta) {
+  //   if (meta) {
+  //     res.end(JSON.stringify({
+  //       success: 1,
+  //       meta
+  //     }));
+  //   } else {
+  //     res.end(JSON.stringify({
+  //       success: 0,
+  //       meta: {}
+  //     }));
+  //     console.log(err);
+  //   }
+  // });
 })
 
 
