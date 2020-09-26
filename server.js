@@ -378,11 +378,7 @@ app.get('/api/fetchUrl', (request, response) => {
   const http = require('http');
   const og = require('open-graph');
   const { url } = request.query;
-  console.log(url, 'URL')
-  const link1 = String(url)
-  console.log(link1, 'LINK1')
   const link = decodeURIComponent(String(url))
-  console.log(link, 'LINK')
   
   // const link = decodeURIComponent(url.slice('/fetchUrl?url='.length));
 
@@ -394,8 +390,6 @@ app.get('/api/fetchUrl', (request, response) => {
         meta
       }));
     } else {
-      console.log(meta, 'META')
-      console.log(response, 'RESPONSE')
       response.send(JSON.stringify({
         success: 0,
         meta: {}
@@ -429,7 +423,6 @@ class ServerExample {
       this.onRequest(req, res);
     }).listen(port);
 
-    console.log(this.server)
 
     this.server.on('listening', () => {
       console.log('Server is listening ' + port + '...');
