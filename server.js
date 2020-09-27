@@ -13,7 +13,6 @@ const port = 3001
 const dbUrl = 'mongodb://localhost/troument'
 // const dbUrl = 'mongodb://localhost/crudtest'
 
-
 var session = require("express-session");
 
 
@@ -217,8 +216,6 @@ mongoose.connect(dbUrl, dbErr => {
     const bcrypt = require('bcrypt');
     const saltRounds = 10;
 
-    // var hashed_password = bcrypt.hashSync(password, saltRounds);
-
     User.find({
       'user_name': user_name
     }).countDocuments()
@@ -232,7 +229,6 @@ mongoose.connect(dbUrl, dbErr => {
           new User({
             user_name,
             password,
-            // password,
             user_id,
             thumbnail: 'image/user.png'
           }).save((err, res) => {
@@ -259,7 +255,6 @@ mongoose.connect(dbUrl, dbErr => {
 
     User.findOne({
       'user_name': user_name,
-      // 'password': password
     })
 
       .then((result) => {
@@ -353,7 +348,6 @@ mongoose.connect(dbUrl, dbErr => {
   });
 
   const upload = multer({
-    // dest: './helloworld/public/image' 
     storage: multerS3({
       s3: s3,
       bucket: 'some-bucket',
@@ -372,17 +366,17 @@ mongoose.connect(dbUrl, dbErr => {
 })
 
 
-// テスト
+  // ****************************************************************///
+  //  link先登録 OGP取得
+  // ****************************************************************///
 
 app.get('/api/fetchUrl', (request, response) => {
   const http = require('http');
   const og = require('open-graph');
+  
   const { url } = request.query;
   const link = decodeURIComponent(String(url))
   
-  // const link = decodeURIComponent(url.slice('/fetchUrl?url='.length));
-
-
   og(link, function (err, meta) {
     if (meta) {
       response.send(JSON.stringify({
@@ -413,80 +407,80 @@ app.get('/api/fetchUrl', (request, response) => {
  */
 
 
-const http = require('http');
-const og = require('open-graph');
+// const http = require('http');
+// const og = require('open-graph');
 
-class ServerExample {
-  constructor({ port, fieldName }) {
-    this.fieldName = fieldName;
-    this.server = http.createServer((req, res) => {
-      this.onRequest(req, res);
-    }).listen(port);
+// class ServerExample {
+//   constructor({ port, fieldName }) {
+//     this.fieldName = fieldName;
+//     this.server = http.createServer((req, res) => {
+//       this.onRequest(req, res);
+//     }).listen(port);
 
 
-    this.server.on('listening', () => {
-      console.log('Server is listening ' + port + '...');
-    });
+//     this.server.on('listening', () => {
+//       console.log('Server is listening ' + port + '...');
+//     });
     
-    this.server.on('error', (error) => {
-      console.log('Failed to run server', error);
-    });
-  }
+//     this.server.on('error', (error) => {
+//       console.log('Failed to run server', error);
+//     });
+//   }
   
   /**
    * Request handler
-   * @param {http.IncomingMessage} req
-   * @param {http.ServerResponse} res
+  //  * @param {http.IncomingMessage} req
+  //  * @param {http.ServerResponse} res
    */
-  onRequest(req, res) {
-    this.allowCors(res);
-    console.log(req, 'REQ')
+  // onRequest(req, res) {
+  //   this.allowCors(res);
+  //   console.log(req, 'REQ')
     
-    const { method, url } = req;
+  //   const { method, url } = req;
     
-    console.log(url, 'URL')
-    if (method.toLowerCase() !== 'get') {
-      res.end();
-      return;
-    }
+  //   console.log(url, 'URL')
+  //   if (method.toLowerCase() !== 'get') {
+  //     res.end();
+  //     return;
+  //   }
     
     // console.log(url)
     // var body = req.protocol + '://' + req.headers.host + req.url;
     // console.log(body)
-    const link = decodeURIComponent(url.slice('/fetchUrl?url='.length));
+    // const link = decodeURIComponent(url.slice('/fetchUrl?url='.length));
 
     /**
      * Get available open-graph meta-tags from page
      */
 
     //  postで関数実行して中でog実行して、linkは送られてきたURLにする
-    og(link, function (err, meta) {
-      if (meta) {
-        res.end(JSON.stringify({
-          success: 1,
-          meta
-        }));
-      } else {
-        res.end(JSON.stringify({
-          success: 0,
-          meta: {}
-        }));
-        console.log(err);
-      }
-    });
-  }
+  //   og(link, function (err, meta) {
+  //     if (meta) {
+  //       res.end(JSON.stringify({
+  //         success: 1,
+  //         meta
+  //       }));
+  //     } else {
+  //       res.end(JSON.stringify({
+  //         success: 0,
+  //         meta: {}
+  //       }));
+  //       console.log(err);
+  //     }
+  //   });
+  // }
 
   /**
    * Allows CORS requests for debugging
-   * @param response
+  //  * @param response
    */
-  allowCors(response) {
-    response.setHeader('Access-Control-Allow-Origin', '*');
-    response.setHeader('Access-Control-Allow-Credentials', 'true');
-    response.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
-    response.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
-  }
-}
+//   allowCors(response) {
+//     response.setHeader('Access-Control-Allow-Origin', '*');
+//     response.setHeader('Access-Control-Allow-Credentials', 'true');
+//     response.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+//     response.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
+//   }
+// }
 
 // new ServerExample({
 //   port: 8080,
