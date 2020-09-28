@@ -43,18 +43,7 @@ mongoose.connect(dbUrl, dbErr => {
     }).sort({ time: 1 }).populate('user')
   })
 
-  // ****************************************************************///
-  // ログインしているユーザーの情報取得  コンポーネント：HOME
-  // ****************************************************************///
 
-
-  app.get('/api/userinfo', (request, response) => {
-    const { username } = request.query
-    User.findOne({ 'user_name': username }, (err, userinfo) => {
-      if (err) response.status(500).send()
-      else response.status(200).send(userinfo)
-    })
-  })
 
   // ****************************************************************///
   // 悩みを投稿時、実行   コンポーネント：HOME
@@ -262,14 +251,14 @@ mongoose.connect(dbUrl, dbErr => {
           const hashedPassword = result.password
           bcrypt.compare(password, hashedPassword)
             .then((isCorrectPassword) => {
-              if(isCorrectPassword){
+              if (isCorrectPassword) {
                 response.status(200).send(result)
-              }else{
+              } else {
                 response.status(200).send('パスワードが一致していません')
               }
             })
-          } else {
-            response.status(200).send('アカウントが存在しません')
+        } else {
+          response.status(200).send('アカウントが存在しません')
         }
 
       }).catch((err) => {
@@ -305,6 +294,18 @@ mongoose.connect(dbUrl, dbErr => {
     }).sort({ time: 1 }).populate('user')
   })
 
+  // ****************************************************************///
+  // ログインしているユーザーの情報取得  コンポーネント：HOME
+  // ****************************************************************///
+
+
+  app.get('/api/userinfo', (request, response) => {
+    const { username } = request.query
+    User.findOne({ 'user_name': username }, (err, userinfo) => {
+      if (err) response.status(500).send()
+      else response.status(200).send(userinfo)
+    })
+  })
 
   // ****************************************************************///
   // いいねしているリストを取得  コンポーネント：MYPAGE
@@ -350,33 +351,43 @@ mongoose.connect(dbUrl, dbErr => {
   const upload = multer({
     storage: multerS3({
       s3: s3,
-      bucket: 'some-bucket',
+      bucket: 'troument',
+      // bucket: 'some-bucket',
       metadata: function (req, file, cb) {
         cb(null, { fieldName: file.fieldname });
       },
       key: function (req, file, cb) {
-        cb(null, Date.now() + file.fileName)
+        cb(null, Date.now().toString() + file.originalname)
+        // cb(null, Date.nowDate.now().toString()}
       }
     })
   });
 
-  app.post('/api/files', upload.array('photos', 3), function (req, res, next) {
-    res.send('Successfully uploaded ' + req.files.length + ' files!')
-  })
+  app.post('/api/files', upload.fields([{ name: 'Files' }]), (req, res) => {
+    const { username, formData } = req.body
+    User.updateOne({ 'user_name': username }, { $set: { 'thumbnail': req.files.Files[0].key } },
+      { upsert: true, multi: true },
+      (err) => {
+        res.status(200).send(req.files)
+      })
+  });
+
+
 })
 
 
-  // ****************************************************************///
-  //  link先登録 OGP取得
-  // ****************************************************************///
+
+// ****************************************************************///
+//  link先登録 OGP取得
+// ****************************************************************///
 
 app.get('/api/fetchUrl', (request, response) => {
   const http = require('http');
   const og = require('open-graph');
-  
+
   const { url } = request.query;
   const link = decodeURIComponent(String(url))
-  
+
   og(link, function (err, meta) {
     if (meta) {
       response.send(JSON.stringify({
@@ -421,12 +432,12 @@ app.get('/api/fetchUrl', (request, response) => {
 //     this.server.on('listening', () => {
 //       console.log('Server is listening ' + port + '...');
 //     });
-    
+
 //     this.server.on('error', (error) => {
 //       console.log('Failed to run server', error);
 //     });
 //   }
-  
+
   /**
    * Request handler
   //  * @param {http.IncomingMessage} req
@@ -435,15 +446,15 @@ app.get('/api/fetchUrl', (request, response) => {
   // onRequest(req, res) {
   //   this.allowCors(res);
   //   console.log(req, 'REQ')
-    
+
   //   const { method, url } = req;
-    
+
   //   console.log(url, 'URL')
   //   if (method.toLowerCase() !== 'get') {
   //     res.end();
   //     return;
   //   }
-    
+
     // console.log(url)
     // var body = req.protocol + '://' + req.headers.host + req.url;
     // console.log(body)
